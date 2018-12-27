@@ -1,0 +1,4 @@
+﻿namespace SB.Domain.Models
+{
+
+}
