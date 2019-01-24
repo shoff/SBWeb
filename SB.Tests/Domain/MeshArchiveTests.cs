@@ -1,11 +1,13 @@
 ﻿namespace SB.Tests.Domain
 {
     using AutoFixture;
+    using BenchmarkDotNet.Running;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Moq;
     using SB.Domain;
     using SB.Domain.Configuration;
+    using SB.Domain.Extensions;
     using Xunit;
 
     public class MeshArchiveTests : BaseTest
@@ -26,6 +28,7 @@
 
             this.meshArchive = new MeshArchive(this.options.Object, this.logger.Object);
         }
+
 
         [Fact]
         public void Constructor_Sets_Name_To_Mesh_Cache()
@@ -50,6 +53,26 @@
         }
 
         [Fact]
+        public void LoadingCacheHeader_As_Slice_Returns_Same_Values()
+        {
+            CacheHeader header = new CacheHeader();
+            using (var reader = this.meshArchive.Data.Slice(0, 16).ToArray().CreateBinaryReaderUtf32())
+            {
+                header.indexCount = reader.ReadUInt32();
+                header.dataOffset = reader.ReadUInt32();
+                header.fileSize = reader.ReadUInt32();
+                header.junk1 = reader.ReadUInt32();
+            }
+
+            this.meshArchive.LoadCacheHeader();
+
+            Assert.Equal(meshArchive.CacheHeader.indexCount, header.indexCount);
+            Assert.Equal(meshArchive.CacheHeader.dataOffset, header.dataOffset);
+            Assert.Equal(meshArchive.CacheHeader.fileSize, header.fileSize);
+            Assert.Equal(meshArchive.CacheHeader.junk1, header.junk1);
+        }
+
+        [Fact]
         public void High_Twenty_Thousand_Mesh_Id_Is_Valid()
         {
             this.meshArchive.LoadIndexes();
@@ -64,5 +87,6 @@
             this.meshArchive.LoadIndexes();
             Assert.Equal(24387, this.meshArchive.CacheIndices.Length);
         }
+
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.IO;
     using Base;
+    using Data.Entities;
     using Extensions;
     using Microsoft.Extensions.Logging;
 

@@ -28,7 +28,7 @@ namespace SB.Data.Entities
         public bool HasTexture { get; set; }
         public int? CacheObjectEntityCacheObjectEntityId { get; set; }
 
-        public virtual CacheObjectEntities CacheObjectEntityCacheObjectEntity { get; set; }
+        public virtual CacheObjectEntity CacheObjectEntityCacheObjectEntity { get; set; }
         public virtual ICollection<RenderChildren> RenderChildren { get; set; }
     }
 }

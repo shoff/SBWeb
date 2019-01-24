@@ -2,6 +2,7 @@
 {
     using System;
     using Base;
+    using Data.Entities;
     using Microsoft.Extensions.Logging;
 
     public class Sun : ModelObject

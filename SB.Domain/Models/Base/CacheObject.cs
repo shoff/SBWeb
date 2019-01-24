@@ -1,6 +1,7 @@
 ﻿namespace SB.Domain.Models.Base
 {
     using System;
+    using Data.Entities;
 
     /// <summary>
     /// </summary>

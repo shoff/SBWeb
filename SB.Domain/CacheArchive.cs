@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using BenchmarkDotNet.Attributes;
     using Configuration;
     using Exceptions;
     using Extensions;
@@ -13,10 +14,12 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    [ClrJob(baseline: true), CoreJob, MonoJob, CoreRtJob]
+    [RPlotExporter, RankColumn]
     public abstract class CacheArchive : IDisposable
     {
         protected readonly ILogger<CacheArchive> logger;
-        protected byte[] bufferData;
+        protected Memory<byte> bufferData;
         protected FileInfo fileInfo;
         protected CacheHeader cacheHeader;
         protected readonly IOptions<Archives> options;
@@ -29,12 +32,6 @@
             {
                 throw new ArgumentNullException(nameof(name));
             }
-
-            if (!File.Exists($"{options.Value.CacheFolder}/Mesh.cache"))
-            {
-                throw new FileNotFoundException($"{options.Value.CacheFolder}\\Mesh.cache");
-            }
-
             this.options = options;
             this.logger = logger;
             this.Name = name;
@@ -44,7 +41,8 @@
             this.bufferData = File.ReadAllBytes(this.fileInfo.FullName);
         }
 
-        public virtual void LoadCacheHeader()
+        [Benchmark]
+        internal virtual void LoadCacheHeader()
         {
             using (var reader = this.bufferData.CreateBinaryReaderUtf32())
             {
@@ -77,12 +75,14 @@
                 logger?.LogInformation($"{this.name} had junk UInt32 in cache header with value {this.cacheHeader.junk1}");
             }
         }
-
+        
+        [Benchmark]
         public virtual async Task LoadIndexesAsync()
         {
             await Task.Run(() => this.LoadIndexes());
         }
 
+        [Benchmark]
         public virtual void LoadIndexes()
         {
             if (this.cacheHeader.indexCount == 0)
@@ -225,6 +225,8 @@
             }
         }
 
+        [Benchmark]
+        [Arguments(1000)]
         public virtual bool Contains(int id)
         {
             return this.CacheIndices.Any(x => x.Identity == id);
@@ -237,35 +239,29 @@
                 throw new ArgumentNullException(nameof(path));
             }
 
-            // TODO move to it's own object, this doesn't belong here.
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
             var asset = this[index.Identity];
 
             if (asset.Item1.Length > 0)
             {
                 await FileWriter.Writer.WriteAsync(asset.Item1,
-                    Path.Combine(path,
-                        this.saveName + asset.CacheIndex1.Identity.ToString(CultureInfo.InvariantCulture) + ".cache"));
+                    path, this.saveName + asset.CacheIndex1.Identity.ToString(CultureInfo.InvariantCulture) + ".cache");
 
                 if (asset.Item2.Length > 0)
                 {
-                    await FileWriter.Writer.WriteAsync(asset.Item2, Path.Combine(path,
+                    await FileWriter.Writer.WriteAsync(asset.Item2, path,
                         this.saveName + asset.CacheIndex2.Identity.ToString(CultureInfo.InvariantCulture) +
-                        "_1.cache"));
+                        "_1.cache");
                 }
             }
         }
 
+        [Benchmark]
         protected void SetFileLocation()
         {
             var folderName = this.options.Value.CacheFolder;
             this.fileInfo = new FileInfo(Path.Combine(folderName, this.Name));
         }
-
+        
         protected byte[] Decompress(uint uncompressedSize, byte[] file)
         {
             if (file.Length == uncompressedSize)

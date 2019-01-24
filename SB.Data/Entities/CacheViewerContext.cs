@@ -17,7 +17,7 @@ namespace SB.Data.Entities
         {
         }
 
-        public virtual DbSet<CacheObjectEntities> CacheObjectEntities { get; set; }
+        public virtual DbSet<CacheObjectEntity> CacheObjectEntities { get; set; }
         public virtual DbSet<Cobjects> Cobjects { get; set; }
         public virtual DbSet<InvalidValues> InvalidValues { get; set; }
         public virtual DbSet<LogTable> LogTable { get; set; }
@@ -49,7 +49,7 @@ namespace SB.Data.Entities
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
-            modelBuilder.Entity<CacheObjectEntities>(entity =>
+            modelBuilder.Entity<CacheObjectEntity>(entity =>
             {
                 entity.HasKey(e => e.CacheObjectEntityId)
                     .HasName("PK_dbo.CacheObjectEntities");

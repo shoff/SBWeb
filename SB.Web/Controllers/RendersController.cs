@@ -1,9 +1,12 @@
 ﻿namespace SB.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
+    using Domain.Extensions;
     using Infrastructure.Repositories;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using ViewModels;
 
     [ApiController]
     [Route("api/[controller]")]
@@ -34,7 +37,19 @@
         public async Task<IActionResult> Get(int page, int count)
         {
             var renders = await this.rendersRepository.GetPagedRenderInformationAsync(page, count);
-            return this.Ok(renders);
+            var views = renders.Map(r => new RenderViewModel
+            {
+                CompressedSize = r.CompressedSize,
+                Data = r.Data.ToHexString(" "),
+                Identity = r.Identity,
+                Junk1 = r.Junk1,
+                Name = r.Name,
+                Offset = r.Offset,
+                Order = r.Order,
+                RenderRawId = r.RenderRawId,
+                UnCompressedSize = r.UnCompressedSize
+            }).ToList();
+            return this.Ok(views);
         }
     }
 }

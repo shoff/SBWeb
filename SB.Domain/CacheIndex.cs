@@ -32,24 +32,15 @@
             this.Flag = flag;
         }
         public int Index { get; }
-
         public uint Identity { get; }
         public uint Junk1 { get; }
         public uint Offset { get; }
         public uint UnCompressedSize { get; }
         public uint CompressedSize { get; }
-
-        // not really part of the index
-        public ushort Order { get; }
+        public ushort Order { get; } // not really part of the index
         public string Name { get; }
         public uint Flag { get; } // this is ALWAYS 0
 
-        /// <summary>
-        ///     Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        ///     A <see cref="System.String" /> that represents this instance.
-        /// </returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -65,11 +56,6 @@
             return sb.ToString();
         }
 
-        /// <summary>
-        ///     Compares to.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns></returns>
         public int CompareTo(CacheIndex other)
         {
             if (this.Flag == other.Flag)

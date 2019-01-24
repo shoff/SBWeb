@@ -1,5 +1,6 @@
 ﻿namespace SB.Domain.Models.Base
 {
+    using Data.Entities;
     using Microsoft.Extensions.Logging;
 
     public abstract class AnimationObject : ModelObject

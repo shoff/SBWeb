@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace SB.Data.Entities
 {
-    public partial class RenderRaws
+    public class RenderRaws
     {
         public int RenderRawId { get; set; }
         public int Identity { get; set; }

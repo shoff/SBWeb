@@ -11,6 +11,6 @@ namespace SB.Data.Entities
         public int RenderAndOffsetId { get; set; }
         public int CacheIndexId { get; set; }
 
-        public virtual CacheObjectEntities CacheObjectEntityCacheObjectEntity { get; set; }
+        public virtual CacheObjectEntity CacheObjectEntityCacheObjectEntity { get; set; }
     }
 }

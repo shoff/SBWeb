@@ -1,6 +1,7 @@
 ﻿namespace SB.Domain.Models.Base
 {
     using System;
+    using Data.Entities;
 
     public interface ICacheObject : IComparable<ICacheObject>
     {

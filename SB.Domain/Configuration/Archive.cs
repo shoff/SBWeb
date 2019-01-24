@@ -2,8 +2,8 @@
 {
     public class Archives
     {
-        public string CacheFolder { get; set; }
-        public string MeshFolder { get; set; }
-        public string CacheObjectsFolder { get; set; }
+        public string CacheFolder { get; set; } = ".\\cache\\";
+        public string MeshFolder { get; set; } = ".\\meshes\\";
+        public string CacheObjectsFolder { get; set; } = ".\\cobjects\\";
     }
 }

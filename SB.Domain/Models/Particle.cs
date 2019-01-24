@@ -1,6 +1,7 @@
 ﻿namespace SB.Domain.Models
 {
     using Base;
+    using Data.Entities;
     using Microsoft.Extensions.Logging;
 
     public class Particle : ModelObject

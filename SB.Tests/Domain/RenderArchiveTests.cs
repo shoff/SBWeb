@@ -20,10 +20,8 @@
             this.archives = this.fixture.Create<Archives>();
             this.options = new Mock<IOptions<Archives>>();
             this.logger = new Mock<ILogger<CacheArchive>>();
-
             this.archives.CacheFolder = ".\\cache\\";
             this.options.SetupGet(archive => archive.Value).Returns(this.archives);
-
             this.renderArchive = new RenderArchive(this.options.Object, this.logger.Object);
         }
 

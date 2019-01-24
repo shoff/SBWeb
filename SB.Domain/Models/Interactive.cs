@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Base;
+    using Data.Entities;
     using Extensions;
     using Microsoft.Extensions.Logging;
 

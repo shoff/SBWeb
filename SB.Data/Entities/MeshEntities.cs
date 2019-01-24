@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SB.Data.Entities
+﻿namespace SB.Data.Entities
 {
-    public partial class MeshEntities
+    using System.Collections.Generic;
+
+    public class MeshEntities
     {
         public MeshEntities()
         {

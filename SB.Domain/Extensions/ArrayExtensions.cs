@@ -1,5 +1,6 @@
 ﻿namespace SB.Domain.Extensions
 {
+    using System;
     using System.IO;
     using System.Text;
 
@@ -8,6 +9,11 @@
         public static BinaryReader CreateBinaryReaderUtf32(this byte[] segment)
         {
             return new BinaryReader(segment.CreateStream(), Encoding.UTF32);
+        }
+
+        public static BinaryReader CreateBinaryReaderUtf32(this Memory<byte> segment)
+        {
+            return new BinaryReader(segment.ToArray().CreateStream(), Encoding.UTF32);
         }
 
         public static Stream CreateStream(this byte[] segment)
@@ -25,7 +31,6 @@
 
             int i = 0, p = prefix.Length, l = segment.Length;
             char[] c = new char[l * 2 + p];
-            byte d;
             for (; i < p; ++i)
             {
                 c[i] = prefix[i];
@@ -36,7 +41,7 @@
             --p;
             while (i < l)
             {
-                d = segment[++i];
+                var d = segment[++i];
                 c[++p] = lookup[d >> 4];
                 c[++p] = lookup[d & 0xF];
             }

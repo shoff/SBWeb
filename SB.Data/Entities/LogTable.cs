@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SB.Data.Entities
+﻿namespace SB.Data.Entities
 {
-    public partial class LogTable
+    using System;
+
+    public class LogTable
     {
         public int LogId { get; set; }
         public DateTime? DateCreated { get; set; }
